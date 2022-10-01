@@ -1,0 +1,12 @@
+- init container를 적용한 Pod
+init container
+앱 컨테이너 실행 전에 미리 동작시킬 컨테이너
+본 Container가 실행되기 전에 사전 작업이 필요할 경우 사용
+초기화 컨테이너가 모두 실행된 후에 앱 컨테이너를 실행
+
+- infra container(pause)이해하기
+pod의 환경을 만들어주는 컨테이너
+pod하나당 pause 하나 생성
+
+docker ps
+현재 동작 중인 컨테이너 정보를 출력하는 명령어

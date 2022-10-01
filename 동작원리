@@ -1,0 +1,110 @@
+- 동작원리
+master컴포넌트
+API: 메인에서 관리
+kube-controller-manager: 파드를 관찰하며 개수를 보장
+kube-scheduler: 파드를 실행할 노드 선택. 어디에 넣어야 할지를 보장
+etcd: key-value타입의 저장소. 모든 상태 정보들을 저장
+kube-apiserver: k8d API를 사용하도록 요청을 받고 요청이 유효한지 검사
+
+worker노드 컴포넌트
+kubelet: 모든 노드에서 실행되는 k8s에이전트. 데몬 형태로 동작
+kube-proxy: k8s의 network 동작을 관리. iptables rule을 구성
+컨테이너 런타임: 컨테이너를 실행하는 엔진. docker, containerd, runc
+
+----------------------------------------------------------------------------------------
+- k8s namespace
+namespace: 클러스터 하나를 여러 개의 논리적인 단위로 나눠서 사용
+쿠버네티스 클러스터 하나를 여러 팀이나 사용자가 함께 공유
+용도에 따라 실행해야 하는 앱을 구분할 때 사용
+살제 쿠버네티스는 하나인데 API가 여러개인 것처럼 논리적으로 나눠서 사용
+kubectl create deploy ui --image=ngix --namespace blue
+kubectl create deploy ui --image=ngix --namespace orange
+kubectl create deploy ui --image=ngix --namespace green
+: 세 개의 namespace를 만들었음
+
+- namespace생성
+CLI로 namespace생성
+$kubectl create namespace blue
+$kubectl get namespaces
+
+yaml로 namespace생성
+$kubectl create namespcae green --dry-run -o yaml>green-ns.yaml
+$vim green-ns.yaml
+$kubectl create -f green-ns.yaml
+
+namespace관리
+$kubectl get namespace
+$kubectl delete namespace
+
+
+실습
+kubectl get node
+kubectl get namespace :현재 시스템에 namespace가 뭐있는지 보여줌. 4개의 namespace가 원래 들어있음
+kubectl get pod :현재 시스템에서 동작중인 pod보기(생략하면 항상 default namespace를 보여줌)
+kubectl get pod --namespace default :현재 시스템에서 동작중인 pod보기(default namespace를 보여줌)
+
+nginx.yaml :nginx yaml파일을 만든다
+
+kubectl create -f[오브젝트명] :파일을 불러들여와 오브젝트를 생성
+kubectl crate -f nginx.yaml
+
+kubectl get pods -n default :default에서 동작 중인 pod보여줌
+kubectl get namespace :namespace보여줌
+kubectl get pods :현재 시스템에서 동작중인 pod보기(생략하면 항상 default namespace를 보여줌)
+kubectl get pods -n kube-system :kube-system에서 동작하는 pod들을 보여줌
+kubectl get pods --all-namespaces :모든 namespace에서 실행되는 모든 pod들을 보여줌
+
+namespace 생성
+CLI방법으로 namespace생성
+kubectl create namespace blue :namespace생성
+
+yaml방법으로 namespace생성
+kubectl create namespace orange --dry-run -o yaml : --dry-run실제로 실행하지 않고 실행 가능 여부만 확인. 실행 결과를 yaml파일로 출력
+kubectl create namespace orange --dry-run -o yaml > orange-ns.yaml :그 결과를 orange-ns.yaml파일에 넣어라
+vi orange-ns.yaml :수정하기
+wq :저장
+
+kubectl create -f orange-ns.yaml :orange-ns.yaml파일을 실행
+kubectl get namespaces : 현재 있는 namespace들을 출력
+
+kubectl create -f nginx.yaml : nginx.yaml파일이 default namespace에서 실행함
+kubectl create -f nginx.yaml -n blue :nginx.yaml파일이 blue namespace에서 실행
+kubectl create -f nginx.yaml -n green :nginx.yaml파일이 green namespace에서 실행
+
+vi nginx.yaml :vi editor띄우기
+metedata에 namespace orange추가 :mypod를 orange에서만 수행하도록 설정해줌
+kubectl create -f nginx.yaml :nginx.yaml파일을 실행 => orange namespace에서 동작함
+
+kubectl get pods -n blue :blue namespace에서 실행중인 pod보기
+
+----------------------------------------------------------------------------------------
+사용할 네임스페이스 switch
+기본으로 사용하는 namespace를 default가 아닌 다른 이름의 namespace로 switch
+방법1) namespace를 포함한 context등록
+$ kubectl config --help
+$ kubectl config set-context NAME --cluster=kubernetes ...
+$ kubectl config view
+방법2) 등록된 namespace로 context변경
+$ kubectl config use-context NAME
+
+실습
+kubectl config --help :config 도움말 보기
+kubectl config view :현재 쿠버네티스의 config정보 보기
+
+kubectl config set-context blue@kubernetes --cluster=kubernetes --user=kubernetes-admin --namespace=blue :blue@kubernetes라는 namespace를 가진 하나의 context를 등록
+
+kubectl config current-context :현재 실행중인 context를 출력
+
+kubectl config use-context blue@kubernetes default namespace가 blue@kubernetes로 switch됨
+
+kubectl get pods -n defalut :default namespace의 pod들을 보기
+
+kubectl delete pods mypod -n default :default namespace에서 동작되는 mypod를 삭제
+
+kubectl config use-context kubernetes-admin@kubernetes :kubernetes-admin@kubernetes(defalut namespace)로 switch됨
+kubectl get pods :default namespace로 이동했는데, default namespace는 비어있어서 no resource가 뜸
+
+namespace삭제하기
+namespace는 API중 가장 큰 단위
+namespace를 지우면 그 안에 있는 모든 것들이 삭제됨
+kubectl delete namespaces blue :blue namespace들이 모두 지워짐

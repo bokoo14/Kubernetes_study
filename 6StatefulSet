@@ -1,0 +1,31 @@
+- StatefulSet
+: pod의 상태를 유지해주는 컨트롤러
+  Pod의 이름
+  pod의 볼륨(스토리지)
+apiVersion: apps/v1
+kind: StatefulSet
+...
+  spec:
+    replicas: 3
+    serviceName: sf-nginx-service
+----------------------------------------------------
+ls
+cat rc-nginx.yaml
+kubectl create -f rc-nginx.yaml
+----------------------------------------------------
+cat statefulSet-exam.yaml
+kubectl crate -f staefulset-exam.yaml
+
+kubectl scale statefulset sf-nginx --replicas=2
+----------------------------------------------------
+kubectl edit staefulsets.apps sf-nginx 
+spec:
+  ...
+  - image: nginx: 1.15 
+:wq
+kubectl describe pod sf-nginx-1
+
+kubectl rollout undo statefulset sf-nginx
+----------------------------------------------------
+
+

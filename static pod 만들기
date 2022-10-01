@@ -1,0 +1,22 @@
+- static pod만들기
+API에게 요청을 보내지 않음
+kubelet Daemon에 의해 동작되는 pod
+API 서버 없이 특정 노드에 있는 kubelet 데몬에 의해 직접 관리
+/etc/kubernetes/manifests/ 디렉토리에 k8s yaml 파일을 저장 시 적용됨
+
+static pod디렉토리 구성
+vi/var/lib/kubelet/config.yaml
+...
+staticPodPath: /etc/kubernetes/manifests
+
+디렉토리 수정 시 kubelet데몬 재실행
+systemctl restart kubelet
+
+
+API 도움 없이 kubelet Daemon으로 Pod실행
+디렉토리는 static Pod path로 정의
+정의된 곳에 Pod yaml를 넣어주면 동작
+-------------------------------------------------
+cd/etc/kubernetes/manifests/
+ls
+cat > nginx.yaml

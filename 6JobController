@@ -1,0 +1,12 @@
+- Job Controller
+
+kubectl scale [scale][object][pod명] --replicas
+object의 replicas수를 scale하는 명령어
+
+Job
+kubernetes는 Pod를 running중인 상태로 유지
+Batch 처리하는 Pod는 작업이 완료되면 종료됨
+Batch처리에 적합한 컨트롤러로 Pod의 성공적인 완료를 보장
+  비정상 종료 시 다시 실행
+  정상 종료 시 완료
+

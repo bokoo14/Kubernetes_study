@@ -1,0 +1,35 @@
+- pod에 리소스(cpu, memory)할당하기
+Pod Resource 요청 및  제한
+
+Resource Requests 
+: 파드를 실행하기 위한 최소 리소스 양을 요청
+
+Resource Limits
+: 파드가 사용할 수 있는 최대 리소스 양을 제한
+Memory limit을 초과해서 사용되는 파드는 종료(OOM Kill)되며 다시 스케줄링 된다.
+
+limit만 설정해주면 request도 동일한 값으로 같이 설정됨
+
+1MB=1000KB
+1MiB=1024KiB
+
+CPU는 코어수로 count함
+1core=1000mcore
+------------------------------------------------------------------
+ssd master :master로 접속
+cd Getting-Started-with-k8s/5/
+ls
+
+vi pod-nginx-resources.yaml :vi editor열기
+resources:
+  memory: 500Mi
+  cpu: 1
+wq :vi editor나가기
+exit
+
+ssd mastercd 
+cd Getting-Started-with-k8s/5/
+ls
+
+kubectl create -f pod-nginx-resources.yaml
+

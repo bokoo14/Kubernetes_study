@@ -1,0 +1,28 @@
+-pod환경변수 설정과 실행 패턴
+: pod내의 컨테이너가 실행될 때 필요로 하는 변수
+컨테이너 제작 시 미리 정의
+NGINX Dockerfile의 예
+ ENV NGINX_VERSION 1.19.2
+ ENV NJS_VERSION 0.4.3
+pod 실행 시 미리 정의된 컨테이너 환경변수를 변경할 수 있다
+
+env:
+  -name: MYVAR
+   value: "testvalue"
+
+- pod 구성 패턴의 종류
+Pod를 구성하고 실행하는 패턴
+multi-container Pod
+
+Sidecar pod
+: 로그를 만들어줘야지만 실행할 수 있는 pod
+혼자서는 움직일 수 없는 pod
+container 여러 개가 필요
+안에서 자기들끼리 통신
+
+Adapter pod
+: 밖에서 가져와서 통신
+
+Ambassador
+: 웹서버가 만든 것을 받아서 내부 안으로 전달
+

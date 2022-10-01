@@ -1,0 +1,30 @@
+- ReplicaSet
+Replication Controller와 동일
+
+ReplicationController와 같은 역할을 하는 컨트롤러
+ReplicationController보다 풍부한 selector
+
+selector:
+  matchLabels:
+    componentL redis
+  matchExpressions:
+    - {key: tier, operator: In, values: [cache]}
+    - {key: environment, operator: NotIn, values: [dev]}
+
+matchExpression연산자
+In: key와 value를 지정하여 key, value가 일치하는 Pod만 연결
+NotIn: key는 일치하고 value는 일치하지 않는 Pod에 연결
+Exist: key에 맞는 label의 Pod를 연결
+DoesNotExist: key와 다른 label의 pod를 연결
+
+----------------------------------------------------------------
+kubectl create -f rs-nginx.yaml
+
+--replicas =[갯수][옵션]
+Replica의 갯수를 수정하는 옵션
+kubectl scale rs rs-nginx --replicas=2
+
+--cascade=false옵션
+연쇄 삭제 기능을 비활성화(default=true)
+kubectl delete rs rs-nginx --cascade=false
+

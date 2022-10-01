@@ -1,0 +1,118 @@
+- kubectl명령어 실습
+설치하지 않고 웹에서 실습: 4시간 쓸 수 있음
+'play with kubernetes'를 통한 실습
+
+1. 마스터 노드(node1) 생성
+kubeadm init --apiserver-advertise-address $(hostname -i) --pod-network-cidr 10.5.0.0/16
+kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml
+
+2. worker node(node2)생성
+kubeadm join 192.168.0.13:6443 --token jqbkno.evqug6ubr7heirfo \
+    --discovery-token-ca-cert-hash sha256:3f86948d2cfec5dee570d4f38119f60e1db5ba77e3175b216ee49d93ec158ee0
+
+3. master node에서 설치가 잘 되었는지 확인
+kubectl get nodes -o wide
+
+실행을 할 수 있다는 상태 확인
+kubectl --help
+
+- kubectl 명령어 기본구조
+kubectl [command][TYPE][NAME][flags]
+kubectl get pod webserver wide
+command: 자원에 실행할 명령
+type: 자원의 타입
+name: 자원의 이름
+flags: 부가적으로 설정할 옵션
+
+-kubectl 명령어 자동완성
+source<(kubectl completion bash)
+source<(kubeadm completion bash)
+echo"source<(kubectl completion bash)">>~/.bashrc
+echo"source<(kubeadm completion bash)">>~/.bashrc
+
+-약어보기
+kubectl api-resources
+
+-logs명령어 사용법
+kubectl logs --help
+
+- 노드 정보 보기(자세히)
+kubectl get nodes -o wide
+
+- 노드 정보 아주 자세히 보기
+kubectl describe node master.example.com
+
+- 웹서버 컨테이너 실행
+kubectl run webserver --image=nginx:1.14 --port 80 :컨테이너 pod 만들기
+kubectl get pods :pods정보 보기
+kubectl get pods -o wide :자세히 보기
+kubectl describe pod webserver :더 자세히 보기
+
+curl IP(실제 IP주소 쓰기) :서버에 접속하기
+sudo apt-get update :패키지 인덱스 정보 업데이트
+
+elinks 설치됐는지 확인
+sudo apt install elinks 설치하기
+y 설치 하기
+
+kubectl get pods -o wide :IP확인
+elinks IP(실제 IP주소 쓰기)
+
+kubectl get pods webserver :webserver 확인
+
+kubectl run :컨테이너 한개를 실행할 때
+kubectl create deployment mainui(이름) --image=httpd:latest --replicas=3  :ui라는 컨테이너 pod 여러 개 실행. ui를 3개 실행해줘
+
+kubectl get deployments.apps :잘 만들어졌는지 확인 
+
+kubectl get pod webserver -o yaml :yaml형식으로 보기
+kubectl get pod webserver -o json :json형식으로 보기
+
+웹페이지에 들어가서 내가 원하는 이름으로 바꾸기
+kubectl exec webserver -it --/bin/bash :컨테이너 내부로 들어감
+컨테이너 내부로 들어옴
+ls
+cd/usr/share/nginx/html/
+ls
+cat index.html :내용보기
+echo "SMLEE web">index.html :index.html을 "SMLEE web"으로 이름 수정
+
+exit :빠져 나감
+curl IP(실제 IP주소) :웹서버에 들어감
+
+kubectl logs webserver :웹서버에서 동작한 로그 보기
+kubectl port-forward webserver 8080:80 :다른 유저들이 접속할 수 있도록 해줌
+
+다른 웹 서버를 복제
+curl localhost:8080 :그 복제된 호스트가 보임
+
+vi editor띄우기
+kubectl edit deployments.apps mainui :동작 중인 오브젝트 수정
+
+kubectl run webserver --image=nginx:1.14 --port 80 --dry-run :컨테이너가 실행되는지 안되는지 체크하기
+kubectl run webserver --image=nginx:1.14 --port 80 --dry-run -o yaml :컨테이너가 실행되는지 yaml포멧으로 보여줘
+kubectl run webserver --image=nginx:1.14 --port 80 --dry-run -o yaml > webserver-pod.yaml :쿠버네티스가 사용하는 yaml파일이 생성
+
+ls :파일들 보기
+
+vi webserver-pod.yaml :편집기 열기
+w :저장
+q :종료
+
+kubectl get pods :pods보기
+
+kubectl delete pod webserver :webserver지우기
+
+kubectl delete deployments.apps.mainoi :deployment지우기
+
+갖고 있는 것: webserver.pod.yaml
+kubectl create -f webserver-pod.yaml :컨테이너 pod실행
+
+
+
+쿠버네티스 실행 2가지 방법 
+1. kubectl run webserver --image=nginx:1.14 --port 80
+2. 미리 yaml파일을 만들어 놓은 다음
+   kubectl create -f webserver-pod.yaml
+   
+

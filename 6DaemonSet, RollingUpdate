@@ -1,0 +1,42 @@
+- DaemonSet, RollingUpdate
+전체 노드에서 pod가 한 개씩 실행되도록 보장
+로그 수입기, 모니터링 에이전트와 같은 프로그램 실행 시 적용
+노드당 1개씩의 Pod를 보장
+로그/모니터링 에이전트에 적합한 컨트롤러
+RollingUpdate 기능 
+
+---------------------------------------------------
+kubectl get nodes
+kubectl delete nodes node3.example.com :worker노드 하나 제거
+kubectl get nodes
+
+cat daemonset-exam.yaml
+kubectl create -f daemonset-exam.yaml :실행
+
+ssh node3 :node3로 가기
+ssh master :master로 가기
+
+kubeadm token list : 현재 보유한 token출력
+kubeadm token delete [token이름] :token제거
+
+kubeadm token create -ttl [시간] :[시간]만큼의 유효기간을 가진 토큰 생성
+
+kubeadm token create --ttl 1h :1시간짜리 token 생성
+
+kubectl reset : node초기화
+
+kubectl get pods -o wide
+kubectl delete pod daemonset-nginx-dhtd6 
+
+---------------------------------------------------
+RollingUpdate기능
+kubectl get daemonsets.apps
+kubectl edit daemonsets.apps daemonset-nginx
+spec: 
+  containers:
+  - images: nginx: 1.15 :버전을 업데이트 시켜줌
+
+kubectl describe pod [pod이름] :pod자세히 보기
+
+---------------------------------------------------
+kubectl rollout undo daemonset daemniset-nginx 

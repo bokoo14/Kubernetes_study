@@ -1,0 +1,44 @@
+-pod-pod동작 flow
+pending: 하나의 pod가 scheduling되기 전까지 상태
+running
+succeeded
+failed
+
+kubectl get pods -o wide --watch :line by line으로 현재 실행 상태를 보여줌
+kubectl delete pod --all : 동작 중인 pod들을 모두 지워줌
+
+kubectl create -f pod-nginx.yaml :yaml파일 실행
+kubectl delete pod nginx-pod :nginx-pod를 삭제
+------------------------------------------------------------------------
+동작 중인 파드 정보 보기
+kubectl get pods
+kubectl get pods -o wide
+kubectl describe pod webserver
+
+동작 중인 파드 수정
+kubectl edit pod webserver
+
+동작 중인 파드 삭제 
+kubectl delete pod webserver
+kubectl delete pod --all :동작 중인 pod를 모두 삭제
+------------------------------------------------------------------------
+kubectl get pods --all namespaces : 전체 namespaces들 중에서 동작 중인 pods들을 모두 보여줌
+------------------------------------------------------------------------
+- 컨테이너 image 'redis123'을 실행하는 pod 'redis'를 redis.yaml을 이용해 생성하시오
+kubectl run redis --image=redis123 --dry-run -o yaml :실제 실행은 하지 않고 실행이 되는지만 확인 
+kubectl run redis --image=redis123 --dry-run -o yaml > redis.yaml :yaml파일 하나가 생성
+
+cat redis.yaml : 파일이 생성되었는지 확인 
+
+vi redis.yaml :vi editor
+kubectl create -f redis.yaml :yaml파일을 실행
+
+- 앞서 만든 redis pod의 image를 redis로 수정하여 동작시키시오
+kubectl describe pod redis :세부적인 것 출력
+
+kubectl edit[오브젝트타입][오브젝트명]
+vi editer를 이용해 오브젝트 파일을 편집하는 명령
+
+kubectl edit pod redis
+image를 redis로 수정
+wq
