@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: websample-ing
+spec:
+  rules:
+  - host: 127.0.0.1.xip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: websample
+            port:
+              number: 5000

@@ -1,0 +1,53 @@
+설치 없이 쿠버네티스 사용하기: 카타코다 쿠버네티스 플레이그라운드, play with kubernetes
+도커 데스크톱을 이용한 쿠버네티스 설치
+
+쿠버네티스는 여러 대 서버를 클러스터 하나로 구성해서 사용하는 시스템
+
+MacOS사용하여 쿠버네티스를 설치
+: 도커 데스크톱에서 쿠버네티스를 사용
+"https://hub.docker.com/editions/community/docker-ce/desktop-mac"에 접속하여 docker다운받기
+MacOs에 도커와 쿠버네티스를 설치
+
+2.3 클라우드 서비스애서 제공하는 쿠버네티스 도구
+쿠버네티스를 제대로 활용하려면 여러 대 서버를 클러스트로 구성해 사용해야 한다
+실제 상용 서비스에 쿠버네티스 클러스터를 구성하고 관리하는 가장 간단한 방법: 각 클라우드 서비스에서 제공하는 관리형 쿠버네티스 도구를 이용하기
+쿠버네티스 클러스터를 전반적으로 관리해주므로 번거로운 인프라 구성과 클러스터 관리를 신경쓰지 않고 쿠버네티스의 기능만 사용하면 됨
+
+- 구글 쿠버네티스 엔진 : 쿠버네티스와 가장 잘 호환되는 클라우드 서비스
+- 아마존 쿠버네티스 일래스틱 컨테이너 서비스 : 아마존 웹 서비스(aws)
+- 애저 쿠버네티스 서비스 : 마리크로소프트 애저
+
+  2.4 쿠버네티스 클러스터를 직접 구성하는 도구
+
+- kubeadm
+  쿠버네티스에서 공식 제공하는 클러스터 셍성/관리 도구
+  여러 대 서버를 쿠버네티스 클러스터로 손쉽게 구성
+  여로 대의 마스터 노드를 구성하고 그 앞에 로드밸런서를 둠
+  워커 노드들이 마스터 노드에 접근할 때는 로드밸런서를 거쳐 접근
+  마스트 노드 1대에 장애가 발생하더라도 로드밸런서에서 다른 마스터 노드로 접근할 수 있게 해서 클러스터의 신뢰성을 유지
+  etcd : 쿠버네티스 클러스터의 데이터 저장소 역할
+  참고) https://www.redhat.com/ko/topics/containers/what-is-etcd
+
+- kubespray
+  상용 서비스에 적합한 보안성과 고가용성이 있는 쿠버네티스 클러스터를 배포하는 오픈 소스 프로젝트
+  노드 각각의 nginx가 리버스 프록시로 실행
+  컴포넌트들은 직접 마스터 노드와 통신하지 않고 자신의 서버 안 nginx와 통신
+  장애 감지는 헬스체크를 이용해 nginx가 알아서 처리
+
+- 마스터 노드
+  노드들의 상태를 관리하고 제어
+- 워커 노드
+  마스터 노드의 명령을 받아 사용자가 선언한 파드나 잡을 실제 실행
+
+[references]
+따배쿠
+https://www.youtube.com/watch?v=lheclzO-G7k&list=PLApuRlvrZKohaBHvXAOhUD-RxD0uQ3z0c&index=4
+
+[따배클] AWS (Amazon Web Service) EKS를 이용하여 Kubernetes를 구축해보자! - 1
+https://www.youtube.com/watch?v=aU9G1p85c-k&list=PLApuRlvrZKoielYfY9_7gqS7oB4MTMI9G
+
+쿠버네티스 공식 문서 참고
+https://kubernetes.io/ko/docs/tasks/tools/install-kubectl-macos/
+
+aws공식 문서 참고
+https://catalog.us-east-1.prod.workshops.aws/workshops/9c0aa9ab-90a9-44a6-abe1-8dff360ae428/ko-KR

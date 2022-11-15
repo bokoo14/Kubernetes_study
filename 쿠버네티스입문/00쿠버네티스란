@@ -1,2 +1,17 @@
+쿠버네티스는 컨테이너화된 애플리케이션을 자동으로 배포, 스케일링 및 관리해주는 오픈소스 시스템
+ref) https://aws.amazon.com/ko/blogs/korea/using-cdk8s-for-kubernetes-applications/
+
 컨테이너 각각을 사용자 수동으로 관리하면 힘들다
 쿠버네티스는 자동으로 컨테이너를 관리하는 여러 가지 도구 중 표준으로 인정받는 검증된 플랫폼
+
+셸에서 해당 템플릿 파일이(*.yaml) 위치한 디렉터리로 이동한 후 kubectl apply -f 파일이름.yaml 명령으로 템플릿 설정을 쿠버네티스에 적용할 수 있음
+
+ nginx컨테이너 이미지를 활용
+
+ https://hub.docker.com/r/arisu1000/simple-container-app
+ 에서 웹서버 컨테이너 이미지를 다운받아 사용
+
+$ docker pull arisu1000/simple-container-app
+위의 명령어를 실행하여 컨테이너 이미지를 다운 받기
+docker file도 포함되어 있으므로 필요하다면 소스 코드를 변경한 후 직접 컨테이너 이미지를 만들어 사용하기
+

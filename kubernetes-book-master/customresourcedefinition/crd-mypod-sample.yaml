@@ -1,0 +1,6 @@
+apiVersion: "crd.example.com/v1"
+kind: MyPod
+metadata:
+  name: my-new-pod-object
+spec:
+  image: my-awesome-cron-image:latest
